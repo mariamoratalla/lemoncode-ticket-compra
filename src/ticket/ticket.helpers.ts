@@ -53,37 +53,31 @@ export const calcularPrecioConIva = (
 };
 
 export const arrayLineas = (lineas: LineaTicket[]): ResultadoLineaTicket[] => {
-  const array: ResultadoLineaTicket[] = [];
-
-  lineas.forEach((linea) => {
-    array.push({
-      nombre: linea.producto.nombre,
-      cantidad: linea.cantidad,
-      precioSinIva: calcularPrecioSinIva(linea.producto, linea.cantidad),
-      tipoIva: linea.producto.tipoIva,
-      precioConIva: calcularPrecioConIva(linea.producto, linea.cantidad),
-    });
-  });
-
-  return array;
+  return lineas.map((linea) => ({
+    nombre: linea.producto.nombre,
+    cantidad: linea.cantidad,
+    precioSinIva: calcularPrecioSinIva(linea.producto, linea.cantidad),
+    tipoIva: linea.producto.tipoIva,
+    precioConIva: calcularPrecioConIva(linea.producto, linea.cantidad),
+  }));
 };
 
 export const calcularResultadoTotal = (
   lineas: ResultadoLineaTicket[]
 ): ResultadoTotalTicket => {
-  let resultado: ResultadoTotalTicket = {
-    totalSinIva: 0,
-    totalConIva: 0,
-    totalIva: 0,
-  };
+  const totalSinIva = Number(
+    lineas.reduce((acc, linea) => acc + linea.precioSinIva, 0).toFixed(2)
+  );
+  const totalConIva = Number(
+    lineas.reduce((acc, linea) => acc + linea.precioConIva, 0).toFixed(2)
+  );
+  const totalIva = Number((totalConIva - totalSinIva).toFixed(2));
 
-  lineas.forEach((linea) => {
-    resultado.totalSinIva += linea.precioSinIva;
-    resultado.totalConIva += linea.precioConIva;
-    resultado.totalIva = Number(
-      (resultado.totalConIva - resultado.totalSinIva).toFixed(2)
-    );
-  });
+  const resultado = {
+    totalSinIva: totalSinIva,
+    totalConIva: totalConIva,
+    totalIva: totalIva,
+  };
 
   return resultado;
 };
