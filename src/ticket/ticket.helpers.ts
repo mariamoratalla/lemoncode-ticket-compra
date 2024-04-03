@@ -74,9 +74,9 @@ export const calcularResultadoTotal = (
   const totalIva = Number((totalConIva - totalSinIva).toFixed(2));
 
   const resultado = {
-    totalSinIva: totalSinIva,
-    totalConIva: totalConIva,
-    totalIva: totalIva,
+    totalSinIva,
+    totalConIva,
+    totalIva,
   };
 
   return resultado;
